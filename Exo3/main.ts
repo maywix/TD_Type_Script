@@ -1,97 +1,119 @@
-import { Adresse } from "./adresse";
-import { Personne } from "./personne";
-import { ListePersonnes } from "./listePersonnes";
+import { adresse } from "./Adresses";
+import { listepersonnes } from "./ListePersonnes";
+import { personne } from "./Personnes";
 
-export class Main {
+export class main {
   public static main(): void {
-    console.log("=== Démarrage programme Exercice 3 ===");
-    const listePersonnes = Main.initialiserDonnees();
-    Main.testerMethodes(listePersonnes);
+    console.log("=== demarrage programme exercice 3 ===");
+    const listeinstance = main.initialiserdonnees();
+    main.testermethodes(listeinstance);
   }
 
-  private static initialiserDonnees(): ListePersonnes {
+  private static initialiserdonnees(): listepersonnes {
     // Création des adresses
-    const adresse1 = new Adresse("123 rue de la Paix", "Paris", "75001");
-    const adresse2 = new Adresse("456 avenue des Champs", "Lyon", "69000");
-    const adresse3 = new Adresse("789 boulevard Saint-Michel", "Marseille", "13000");
-    const adresse4 = new Adresse("321 rue Victor Hugo", "Paris", "75002");
-    const adresse5 = new Adresse("654 place de la République", "Toulouse", "31000");
+    const adresse1 = new adresse("25 rue de la gaite", "montpellier", "34000");
+    const adresse2 = new adresse("78 avenue des palmiers", "nice", "06000");
+    const adresse3 = new adresse(
+      "156 boulevard jean jaures",
+      "bordeaux",
+      "33000"
+    );
+    const adresse4 = new adresse("42 rue pasteur", "montpellier", "34070");
+    const adresse5 = new adresse("88 place wilson", "nantes", "44000");
 
     // Création des personnes
-    const personne1 = new Personne("Dupont", "M", [adresse1, adresse4]);
-    const personne2 = new Personne("Martin", "F", [adresse2]);
-    const personne3 = new Personne("Durand", "M", [adresse3, adresse5]);
-    const personne4 = new Personne("Leblanc", "F", [adresse1]);
+    const personne1 = new personne("bernard", "M", [adresse1, adresse4]);
+    const personne2 = new personne("sophie", "F", [adresse2]);
+    const personne3 = new personne("julien", "M", [adresse3, adresse5]);
+    const personne4 = new personne("claire", "F", [adresse1]);
 
     // Création de la liste des personnes
     const personnes = [personne1, personne2, personne3, personne4];
-    const listePersonnes = new ListePersonnes(personnes);
+    const listeinstance = new listepersonnes(personnes);
 
-    console.log("Données initiales créées !");
-    listePersonnes.afficherPersonnes();
+    console.log("donnees initiales creees !");
+    listeinstance.afficherpersonnes();
 
-    return listePersonnes;
+    return listeinstance;
   }
 
-  private static testerMethodes(listePersonnes: ListePersonnes): void {
-    console.log("\n=== Tests des méthodes ===");
+  private static testermethodes(listeinstance: listepersonnes): void {
+    console.log("\n=== tests des methodes ===");
 
-    // Test de findByNom
-    console.log("\n1. Test findByNom:");
-    const personneTrouvee = listePersonnes.findByNom("Dupont");
-    if (personneTrouvee) {
-      console.log(`Personne trouvée: ${personneTrouvee._nom}, Sexe: ${personneTrouvee._sexe}`);
+    // Test de findbynom
+    console.log("\n1. test findbynom:");
+    const personnetrouvee = listeinstance.findbynom("bernard");
+    if (personnetrouvee) {
+      console.log(
+        `personne trouvee: ${personnetrouvee.nom}, sexe: ${personnetrouvee.sexe}`
+      );
     } else {
-      console.log("Personne non trouvée");
+      console.log("personne non trouvee");
     }
 
-    const personneNonTrouvee = listePersonnes.findByNom("Inexistant");
-    console.log(`Recherche 'Inexistant': ${personneNonTrouvee ? "Trouvé" : "Non trouvé"}`);
+    const personneinexistante = listeinstance.findbynom("inexistant");
+    console.log(
+      `recherche 'inexistant': ${personneinexistante ? "trouve" : "non trouve"}`
+    );
 
-    // Test de findByCodePostal
-    console.log("\n2. Test findByCodePostal:");
-    console.log(`Code postal 75001 existe: ${listePersonnes.findByCodePostal("75001")}`);
-    console.log(`Code postal 99999 existe: ${listePersonnes.findByCodePostal("99999")}`);
+    // Test de findbycodepostal
+    console.log("\n2. test findbycodepostal:");
+    console.log(
+      `code postal 34000 existe: ${listeinstance.findbycodepostal("34000")}`
+    );
+    console.log(
+      `code postal 99999 existe: ${listeinstance.findbycodepostal("99999")}`
+    );
 
-    // Test de countPersonneVille
-    console.log("\n3. Test countPersonneVille:");
-    console.log(`Nombre de personnes à Paris: ${listePersonnes.countPersonneVille("Paris")}`);
-    console.log(`Nombre de personnes à Lyon: ${listePersonnes.countPersonneVille("Lyon")}`);
-    console.log(`Nombre de personnes à Nice: ${listePersonnes.countPersonneVille("Nice")}`);
+    // Test de countpersonnevville
+    console.log("\n3. test countpersonnevville:");
+    console.log(
+      `nombre de personnes a montpellier: ${listeinstance.countpersonnevville(
+        "montpellier"
+      )}`
+    );
+    console.log(
+      `nombre de personnes a nice: ${listeinstance.countpersonnevville("nice")}`
+    );
+    console.log(
+      `nombre de personnes a marseille: ${listeinstance.countpersonnevville(
+        "marseille"
+      )}`
+    );
 
-    // Test de editPersonneNom
-    console.log("\n4. Test editPersonneNom:");
-    console.log("Avant modification:");
-    const dupont = listePersonnes.findByNom("Dupont");
-    console.log(`Nom actuel: ${dupont ? dupont._nom : "Non trouvé"}`);
-    
-    listePersonnes.editPersonneNom("Dupont", "Dupuis");
-    console.log("Après modification Dupont -> Dupuis:");
-    const dupuis = listePersonnes.findByNom("Dupuis");
-    console.log(`Nouveau nom: ${dupuis ? dupuis._nom : "Non trouvé"}`);
+    // Test de editpersonneenom
+    console.log("\n4. test editpersonneenom:");
+    console.log("avant modification:");
+    const bernard = listeinstance.findbynom("bernard");
+    console.log(`nom actuel: ${bernard ? bernard.nom : "non trouve"}`);
 
-    // Test de editPersonneVille
-    console.log("\n5. Test editPersonneVille:");
-    console.log("Avant modification des villes de Martin:");
-    const martin = listePersonnes.findByNom("Martin");
-    if (martin) {
-      for (let i = 0; i < martin._adresses.length; i++) {
-        console.log(`  Ville: ${martin._adresses[i]._ville}`);
+    listeinstance.editpersonneenom("bernard", "robert");
+    console.log("apres modification bernard -> robert:");
+    const robert = listeinstance.findbynom("robert");
+    console.log(`nouveau nom: ${robert ? robert.nom : "non trouve"}`);
+
+    // Test de editpersonnevville
+    console.log("\n5. test editpersonnevville:");
+    console.log("avant modification des villes de sophie:");
+    const sophie = listeinstance.findbynom("sophie");
+    if (sophie) {
+      for (let i = 0; i < sophie.adresses.length; i++) {
+        console.log(`  ville: ${sophie.adresses[i].ville}`);
       }
     }
-    
-    listePersonnes.editPersonneVille("Martin", "Bordeaux");
-    console.log("Après modification des villes de Martin -> Bordeaux:");
-    if (martin) {
-      for (let i = 0; i < martin._adresses.length; i++) {
-        console.log(`  Nouvelle ville: ${martin._adresses[i]._ville}`);
+
+    listeinstance.editpersonnevville("sophie", "cannes");
+    console.log("apres modification des villes de sophie -> cannes:");
+    if (sophie) {
+      for (let i = 0; i < sophie.adresses.length; i++) {
+        console.log(`  nouvelle ville: ${sophie.adresses[i].ville}`);
       }
     }
 
-    console.log("\n=== État final ===");
-    listePersonnes.afficherPersonnes();
+    console.log("\n=== etat final ===");
+    listeinstance.afficherpersonnes();
   }
 }
 
-// Appeler la fonction main pour exécuter le programme
-Main.main();
+// appeler la fonction main pour executer le programme
+main.main();

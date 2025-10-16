@@ -1,23 +1,22 @@
-import { Personne } from "./personne";
-import { Adresse } from "./adresse";
+import { personne } from "./Personnes";
 
-export class ListePersonnes {
+export class listepersonnes {
   // Constructeur avec un seul attribut personnes
-  constructor(private personnes: Personne[]) {}
+  constructor(private personnes: personne[]) {}
 
   // Getters et setters pour personnes
-  public get _personnes(): Personne[] {
+  public get _personnes(): personne[] {
     return this.personnes;
   }
 
-  public set _personnes(value: Personne[]) {
+  public set _personnes(value: personne[]) {
     this.personnes = value;
   }
 
   // Méthode 3: Chercher dans le tableau personnes si l'attribut nom d'un est égal à la valeur du paramètre s
-  public findByNom(s: string): Personne | null {
+  public findbynom(s: string): personne | null {
     for (let i = 0; i < this.personnes.length; i++) {
-      if (this.personnes[i]._nom === s) {
+      if (this.personnes[i].nom === s) {
         return this.personnes[i];
       }
     }
@@ -25,11 +24,11 @@ export class ListePersonnes {
   }
 
   // Méthode 4: Vérifier dans le tableau personnes si un objet possède au moins une adresse dont le code postal égal au paramètre cp
-  public findByCodePostal(cp: string): boolean {
+  public findbycodepostal(cp: string): boolean {
     for (let i = 0; i < this.personnes.length; i++) {
-      const adresses = this.personnes[i]._adresses;
+      const adresses = this.personnes[i].adresses;
       for (let j = 0; j < adresses.length; j++) {
-        if (adresses[j]._codePostal === cp) {
+        if (adresses[j].codePostal === cp) {
           return true;
         }
       }
@@ -38,12 +37,12 @@ export class ListePersonnes {
   }
 
   // Méthode 5: Calculer le nombre d'objets dans le tableau personnes ayant une adresse dans la ville passée en paramètre
-  public countPersonneVille(ville: string): number {
+  public countpersonnevville(ville: string): number {
     let count = 0;
     for (let i = 0; i < this.personnes.length; i++) {
-      const adresses = this.personnes[i]._adresses;
+      const adresses = this.personnes[i].adresses;
       for (let j = 0; j < adresses.length; j++) {
-        if (adresses[j]._ville === ville) {
+        if (adresses[j].ville === ville) {
           count++;
           break; // Une fois qu'on trouve une adresse dans la ville, on passe à la personne suivante
         }
@@ -53,36 +52,38 @@ export class ListePersonnes {
   }
 
   // Méthode 6: Remplacer les noms de personnes ayant un nom égal à la valeur oldNom par newNom
-  public editPersonneNom(oldNom: string, newNom: string): void {
+  public editpersonneenom(oldNom: string, newNom: string): void {
     for (let i = 0; i < this.personnes.length; i++) {
-      if (this.personnes[i]._nom === oldNom) {
-        this.personnes[i]._nom = newNom;
+      if (this.personnes[i].nom === oldNom) {
+        this.personnes[i].nom = newNom;
       }
     }
   }
 
   // Méthode 7: Remplacer les villes de personnes ayant un nom égal à la valeur du paramètre nom par newVille
-  public editPersonneVille(nom: string, newVille: string): void {
+  public editpersonnevville(nom: string, newVille: string): void {
     for (let i = 0; i < this.personnes.length; i++) {
-      if (this.personnes[i]._nom === nom) {
-        const adresses = this.personnes[i]._adresses;
+      if (this.personnes[i].nom === nom) {
+        const adresses = this.personnes[i].adresses;
         for (let j = 0; j < adresses.length; j++) {
-          adresses[j]._ville = newVille;
+          adresses[j].ville = newVille;
         }
       }
     }
   }
 
   // Méthode pour afficher toutes les personnes
-  public afficherPersonnes(): void {
+  public afficherpersonnes(): void {
     console.log("=== Liste des personnes ===");
     for (let i = 0; i < this.personnes.length; i++) {
       const personne = this.personnes[i];
-      console.log(`Nom: ${personne._nom}, Sexe: ${personne._sexe}`);
+      console.log(`Nom: ${personne.nom}, Sexe: ${personne.sexe}`);
       console.log("Adresses:");
-      for (let j = 0; j < personne._adresses.length; j++) {
-        const adresse = personne._adresses[j];
-        console.log(`  - ${adresse._rue}, ${adresse._ville} ${adresse._codePostal}`);
+      for (let j = 0; j < personne.adresses.length; j++) {
+        const adresse = personne.adresses[j];
+        console.log(
+          `  - ${adresse.rue}, ${adresse.ville} ${adresse.codePostal}`
+        );
       }
       console.log("---");
     }

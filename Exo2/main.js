@@ -8,7 +8,7 @@ var Main = /** @class */ (function () {
     }
     Main.main = function () {
         //initialisation des donnéees
-        console.log("demarrage programme ex2");
+        console.log("demarrage du programme ex2");
         var formation = Main.initialiserformation();
     };
     Main.initialiserformation = function () {
