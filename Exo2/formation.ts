@@ -1,17 +1,14 @@
-// Classe Formation pour gérer une formation avec des stagiaires
-export class formation {
-  // Constructeur avec paramètres typés
+import { stagiaire } from "./stagiaire";
+
+export class Formation {
   constructor(
     private intitulé: string,
     private nbrjours: number,
-    public stagiaires: number[]
+    public stagiaires: stagiaire[]
   ) {}
-
-  // Getter et setters
   public get _intitulé(): string {
     return this.intitulé;
   }
-
   public set _intitulé(value: string) {
     this.intitulé = value;
   }
@@ -19,67 +16,81 @@ export class formation {
   public get _nbrjours(): number {
     return this.nbrjours;
   }
-
   public set _nbrjours(value: number) {
     this.nbrjours = value;
   }
 
-  public get _stagiaires(): number[] {
+  public get _stagiaires(): stagiaire[] {
     return this.stagiaires;
   }
-
-  public set _stagiaires(value: number[]) {
+  public set _stagiaires(value: stagiaire[]) {
     this.stagiaires = value;
   }
 
-  // Méthode 6: Calcule la moyenne générale de la formation
-  public calculermoyenneformation(): number {
-    if (this.stagiaires.length === 0) return 0; // Gestion cas vide
-    return (
-      this.stagiaires.reduce((sum, note) => sum + note, 0) /
-      this.stagiaires.length
+  calculerMoyenneFormation(): number {
+    if (this.stagiaires.length === 0) return 0;
+    const sommeMoyennes = this.stagiaires.reduce(
+      (sum, stagiaire) => sum + stagiaire.calculermoyenne(),
+      0
     );
+    return sommeMoyennes / this.stagiaires.length;
   }
 
-  // Méthode 7: Trouve l'index du stagiaire avec la meilleure note
-  public getindexmax(): number {
-    if (this.stagiaires.length === 0) return -1; // Retourne -1 si vide
-    return this.stagiaires.indexOf(Math.max(...this.stagiaires));
+  // trouver l'indice du stagiaire avec la meilleure moyenne
+  getIndexMax(): number {
+    if (this._stagiaires.length === 0) return -1;
+    let meilleureMoyenne = 0;
+    let index = -1;
+
+    //utilisation d'une boucle for pour parcourir les stagiaires au lieu de find car il y a des erreurs de compilation
+    for (let i = 0; i < this._stagiaires.length; i++) {
+      if (this._stagiaires[i].calculermoyenne() > meilleureMoyenne) {
+        meilleureMoyenne = this._stagiaires[i].calculermoyenne();
+        index = i;
+      }
+    }
+    return index;
+  }
+  //trouver la note minimale d'un stagiaire
+  getNoteMinStagiaire(nom: string): number {
+    const stagiaire = this._stagiaires.find((s) => s._nom === nom);
+    if (stagiaire) {
+      return stagiaire.trouvermin();
+    }
+    return -1; // ou gérer le cas où le stagiaire n'est pas trouvé
   }
 
-  // Méthode 8: Affiche le nom du meilleur stagiaire
-  public affichernommax(): void {
-    const indexMax = this.getindexmax();
+  afficherNomMax(): void {
+    const indexMax = this.getIndexMax();
     if (indexMax !== -1) {
       console.log(
-        `Le meilleur stagiaire est : index ${indexMax}, note ${this.stagiaires[indexMax]}`
+        `Le meilleur stagiaire est : ${this._stagiaires[indexMax]._nom}`
       );
-    } else {
-      console.log("Aucun stagiaire");
-    }
-  }
-
-  // Méthode 9: Affiche les notes min et max du meilleur stagiaire
-  public afficherminmax(): void {
-    const indexMax = this.getindexmax();
-    if (indexMax !== -1) {
-      const noteMin = Math.min(...this.stagiaires); // Note minimale globale
-      const noteMax = Math.max(...this.stagiaires); // Note maximale globale
-      console.log(`La note minimale du meilleur stagiaire est : ${noteMin}`);
-      console.log(`La note maximale du meilleur stagiaire est : ${noteMax}`);
     } else {
       console.log("Aucun stagiaire dans la formation");
     }
   }
 
-  // Méthode 10: Trouve et affiche la moyenne par nom (recherche insensible à la casse)
-  public trouvermoyenneparnom(nom: string): void {
-    const nomLower = nom.toLowerCase(); // Conversion en minuscules
-    if (this.stagiaires.length > 0) {
-      const moyenne = this.calculermoyenneformation();
-      console.log(`Moyenne pour ${nomLower}: ${moyenne.toFixed(2)}`);
+  afficherMinMax(): void {
+    const indexMax = this.getIndexMax();
+    if (indexMax !== -1) {
+      const stagiaireMax = this._stagiaires[indexMax];
+      console.log(
+        `La note minimale du meilleur stagiaire est : ${stagiaireMax.trouvermin()}`
+      );
     } else {
-      console.log(`Aucun stagiaire trouvé pour ${nomLower}`);
+      console.log("Aucun stagiaire dans la formation");
+    }
+  }
+
+  trouverMoyenneParNom(nom: string): void {
+    const stagiaire = this._stagiaires.find((s) => s._nom === nom);
+    if (stagiaire) {
+      console.log(
+        `Moyenne pour ${nom}: ${stagiaire.calculermoyenne().toFixed(2)}`
+      );
+    } else {
+      console.log(`Stagiaire ${nom} non trouvé`);
     }
   }
 }
